@@ -1,0 +1,39 @@
+[Unit]
+Description=XUI One Loopback Server
+Documentation=https://github.com/TalaveraSama/IUX-ZONE
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/xui/decoded
+ExecStart=/usr/bin/php includes/cli/loopback.php start
+ExecStop=/usr/bin/php includes/cli/loopback.php stop
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/xui/tmp /var/www/xui/config
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=32768
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=xui-loopback
+
+[Install]
+WantedBy=multi-user.target

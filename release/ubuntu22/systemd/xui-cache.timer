@@ -1,0 +1,11 @@
+[Unit]
+Description=Run XUI One Cache Cleanup daily at 3 AM
+Requires=xui-cache.service
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+AccuracySec=1h
+Persistent=true
+
+[Install]
+WantedBy=timers.target

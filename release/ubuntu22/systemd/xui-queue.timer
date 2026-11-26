@@ -1,0 +1,12 @@
+[Unit]
+Description=Run XUI One Task Queue every minute
+Requires=xui-queue.service
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+AccuracySec=1s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

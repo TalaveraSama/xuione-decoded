@@ -1,0 +1,70 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name {{DOMAIN}};
+    root {{INSTALL_PATH}}/decoded/www;
+    index index.php;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml application/json application/rss+xml image/svg+xml;
+
+    # Client max body size
+    client_max_body_size 100M;
+
+    # Main location
+    location / {
+        try_files $uri $uri/ /init.php?$query_string;
+    }
+
+    # PHP handling
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php8.1-fpm-xui.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        include fastcgi_params;
+        fastcgi_read_timeout 300;
+        fastcgi_send_timeout 300;
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 4 256k;
+        fastcgi_busy_buffers_size 256k;
+    }
+
+    # Deny access to sensitive files
+    location ~ /\.(git|env|htaccess|gitignore) {
+        deny all;
+        return 404;
+    }
+
+    location ~ /(config|tmp|includes|cli)/ {
+        deny all;
+        return 404;
+    }
+
+    # Static files caching
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # HLS segment files (no cache for live)
+    location ~* \.(m3u8|ts)$ {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Access-Control-Allow-Origin "*";
+        access_log off;
+    }
+
+    # Logging
+    access_log /var/log/nginx/xui_access.log;
+    error_log /var/log/nginx/xui_error.log;
+}

@@ -1,0 +1,29 @@
+[Unit]
+Description=XUI One Cache Cleanup
+Documentation=https://github.com/TalaveraSama/IUX-ZONE
+After=network.target
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/xui/decoded
+ExecStart=/usr/bin/php includes/cli/cache_handler.php clean
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/xui/tmp /var/www/xui/config
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=xui-cache
+
+[Install]
+WantedBy=multi-user.target

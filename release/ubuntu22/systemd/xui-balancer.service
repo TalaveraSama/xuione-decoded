@@ -1,0 +1,40 @@
+[Unit]
+Description=XUI One Load Balancer Daemon
+Documentation=https://github.com/TalaveraSama/IUX-ZONE
+After=network.target mysql.service redis.service
+Wants=mysql.service redis.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/xui/decoded
+ExecStart=/usr/bin/php includes/cli/balancer.php start
+ExecStop=/usr/bin/php includes/cli/balancer.php stop
+ExecReload=/usr/bin/php includes/cli/balancer.php reload
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/xui/tmp /var/www/xui/config
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=32768
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=xui-balancer
+
+[Install]
+WantedBy=multi-user.target

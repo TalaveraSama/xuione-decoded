@@ -1,0 +1,66 @@
+[database]
+host = localhost
+port = 3306
+username = xui
+password = {{DB_PASSWORD}}
+dbname = xui
+
+[redis]
+host = 127.0.0.1
+port = 6379
+password = {{REDIS_PASSWORD}}
+db = 0
+
+[panel]
+url = https://{{DOMAIN}}
+timezone = {{TIMEZONE}}
+language = en
+theme = default
+
+[security]
+flood_limit = 50
+flood_seconds = 60
+flood_ips_exclude = 127.0.0.1,::1
+bruteforce_mac_attempts = 10
+bruteforce_username_attempts = 10
+bruteforce_frequency = 300
+security_key = {{SECURITY_KEY}}
+
+[streaming]
+ffmpeg_cpu = 4.4
+ffmpeg_gpu = 4.0
+segment_type = hls
+seg_time = 10
+seg_list_size = 5
+seg_delete_threshold = 3
+hls_encryption = 0
+token_expiry = 3600
+
+[paths]
+home = {{INSTALL_PATH}}/
+tmp = {{INSTALL_PATH}}/tmp/
+logs = {{INSTALL_PATH}}/tmp/logs/
+cache = {{INSTALL_PATH}}/tmp/cache/
+flood = {{INSTALL_PATH}}/tmp/flood/
+records = {{INSTALL_PATH}}/tmp/records/
+thumbnails = {{INSTALL_PATH}}/tmp/thumbnails/
+
+[epg]
+update_interval = 21600
+source_timeout = 30
+max_epg_days = 7
+
+[recording]
+max_concurrent = 5
+default_duration = 7200
+keep_days = 30
+format = ts
+
+[transcoding]
+enabled = 1
+preset = fast
+crf = 23
+audio_bitrate = 128k
+video_codec = libx264
+audio_codec = aac
+hwaccel = auto
