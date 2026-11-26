@@ -206,16 +206,16 @@ php_admin_flag[display_errors] = Off
 php_admin_value[error_log] = /var/log/php8.1-fpm-xui.log
 EOF
     
-    # Configure PHP.ini
-    sed -i "s/^;date.timezone =.*/date.timezone = $XUI_TIMEZONE/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^memory_limit =.*/memory_limit = 512M/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^max_execution_time =.*/max_execution_time = 300/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^post_max_size =.*/post_max_size = 100M/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^upload_max_filesize =.*/upload_max_filesize = 100M/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^opcache.enable=.*/opcache.enable=1/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^;opcache.memory_consumption=.*/opcache.memory_consumption=256/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=20000/" /etc/php/8.1/fpm/php.ini
-    sed -i "s/^expose_php =.*/expose_php = Off/" /etc/php/8.1/fpm/php.ini
+    # Configure PHP.ini (use | as delimiter to handle timezone with /)
+    sed -i "s|^;date.timezone =.*|date.timezone = $XUI_TIMEZONE|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^memory_limit =.*|memory_limit = 512M|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^max_execution_time =.*|max_execution_time = 300|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^post_max_size =.*|post_max_size = 100M|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^upload_max_filesize =.*|upload_max_filesize = 100M|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^opcache.enable=.*|opcache.enable=1|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^;opcache.memory_consumption=.*|opcache.memory_consumption=256|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^;opcache.max_accelerated_files=.*|opcache.max_accelerated_files=20000|" /etc/php/8.1/fpm/php.ini
+    sed -i "s|^expose_php =.*|expose_php = Off|" /etc/php/8.1/fpm/php.ini
     
     systemctl enable --now php8.1-fpm
     log_success "PHP 8.1 installed and configured"
